@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Ifechi Store - All-in-one Platform for SMS & Social Growth</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              500: '#1652f0',
+              600: '#0052ff',
+              700: '#0043d1',
+              800: '#0034a8',
+            },
+            dark: '#0d1117'
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          animation: {
+            'bounce-subtle': 'bounceSubtle 2s infinite',
+            'float': 'float 3s ease-in-out infinite',
+            'pulse-fast': 'pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+          },
+          keyframes: {
+            bounceSubtle: {
+              '0%, 100%': { transform: 'translateY(-2%)' },
+              '50%': { transform: 'translateY(0)' },
+            },
+            float: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-6px)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #f8fafc;
+      color: #0d1117;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .gradient-text {
+      background: linear-gradient(135deg, #0052ff 0%, #1652f0 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .card-shadow {
+      box-shadow: 0 10px 30px -5px rgba(0, 82, 255, 0.08), 0 4px 12px -2px rgba(0, 0, 0, 0.03);
+    }
+    .confetti-bg {
+      background-image: radial-gradient(#0052ff 10%, transparent 11%), radial-gradient(#ffc107 10%, transparent 11%), radial-gradient(#ff4081 10%, transparent 11%);
+      background-size: 60px 60px;
+      background-position: 0 0, 30px 30px, 15px 45px;
+      opacity: 0.15;
+    }
+    /* Hide scrollbars for clean UI */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-brand-500 selection:text-white">
+
+  <!-- TOP ANNOUNCEMENT BANNER -->
+  <div class="bg-brand-600 text-white text-xs md:text-sm font-semibold py-2 px-4 text-center flex items-center justify-center gap-2">
+    <span class="bg-white/20 px-2 py-0.5 rounded-full text-[11px] uppercase tracking-wider">New</span>
+    <span>Instant Automated WhatsApp & Telegram SMS OTP Delivery Active!</span>
+  </div>
+
+  <!-- NAVIGATION HEADER -->
+  <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-100">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+      <!-- Logo -->
+      <a href="#" class="flex items-center gap-2 text-xl font-extrabold text-slate-900 tracking-tight">
+        <div class="w-9 h-9 rounded-xl bg-brand-600 flex items-center justify-center text-white shadow-md shadow-brand-500/30">
+          <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+        </div>
+        <span>Ifechi<span class="text-brand-600">-Store</span></span>
+      </a>
+
+      <!-- Desktop Nav -->
+      <nav class="hidden md:flex items-center gap-8 font-medium text-slate-600 text-sm">
+        <a href="#services" class="hover:text-brand-600 transition-colors">Services</a>
+        <a href="#welcome-card" class="hover:text-brand-600 transition-colors">Dashboard</a>
+        <a href="#pricing" class="hover:text-brand-600 transition-colors">Rates</a>
+        <a href="#faq" class="hover:text-brand-600 transition-colors">Help FAQ</a>
+      </nav>
+
+      <!-- Auth & Actions -->
+      <div class="flex items-center gap-3">
+        <button onclick="toggleModal('fundModal')" class="hidden sm:flex items-center gap-1.5 text-xs font-bold bg-brand-50 text-brand-600 px-3 py-2 rounded-xl border border-brand-100 hover:bg-brand-100 transition">
+          <i data-lucide="wallet" class="w-4 h-4"></i>
+          <span>₦<span id="userBalance">15,400.00</span></span>
+        </button>
+        <button onclick="openToast('Successfully signed in as Demo User')" class="bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold px-4 py-2.5 rounded-xl transition shadow-lg shadow-brand-500/25 active:scale-95">
+          My Account
+        </button>
+        <button onclick="toggleMobileMenu()" class="md:hidden p-2 text-slate-600 hover:text-slate-900">
+          <i data-lucide="menu" class="w-6 h-6"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MOBILE MENU DROPDOWN -->
+  <div id="mobileMenu" class="hidden md:hidden bg-white border-b border-slate-200 px-6 py-4 space-y-3 font-medium text-slate-700">
+    <a href="#services" onclick="toggleMobileMenu()" class="block py-2">Services</a>
+    <a href="#welcome-card" onclick="toggleMobileMenu()" class="block py-2">Dashboard</a>
+    <a href="#pricing" onclick="toggleMobileMenu()" class="block py-2">Prices</a>
+    <a href="#faq" onclick="toggleMobileMenu()" class="block py-2">FAQ</a>
+    <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-sm">
+      <span class="text-slate-500">Wallet Balance:</span>
+      <span class="font-bold text-brand-600">₦15,400.00</span>
+    </div>
+  </div>
+
+  <main class="flex-grow">
+    <!-- HERO SECTION -->
+    <section class="relative pt-8 pb-12 md:pt-16 md:pb-20 overflow-hidden">
+      <div class="max-w-4xl mx-auto px-4 text-center">
+        
+        <!-- Pill Badge (Exact Replica from Reference Screenshot) -->
+        <div class="inline-flex items-center gap-2 bg-brand-50 border border-brand-100 px-3.5 py-1.5 rounded-full text-xs sm:text-sm text-brand-700 font-semibold mb-6 shadow-sm">
+          <span class="bg-white px-2 py-0.5 rounded-full text-xs font-bold text-slate-800 border border-slate-200">Latest Read</span>
+          <span id="badgeHeadline" class="truncate max-w-[220px] sm:max-w-xs">Ifechi Store Trusted by over 50k+ users</span>
+          <i data-lucide="chevron-right" class="w-4 h-4 text-brand-600"></i>
+        </div>
+
+        <!-- Main Dynamic Headline -->
+        <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-[1.15] mb-6">
+          All-in-one platform for <br class="hidden sm:inline"/>
+          <span class="text-brand-600 inline-block" id="heroDynamicText">Recieve SMS Instantly</span>
+        </h1>
+
+        <!-- Subtitle -->
+        <p class="text-slate-600 text-base sm:text-lg max-w-2xl mx-auto mb-8 font-normal leading-relaxed">
+          At Ifechi Store, we provide high-deliverability virtual SMS numbers, social media account logs, and powerful social media boosting to help you grow online.
+        </p>
+
+        <!-- CTA Buttons -->
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-3 max-w-md mx-auto mb-10">
+          <a href="#services" class="w-full sm:w-auto min-w-[180px] bg-brand-600 hover:bg-brand-700 text-white font-bold py-3.5 px-6 rounded-full shadow-lg shadow-brand-500/30 transition text-center active:scale-95">
+            Get Started
+          </a>
+          <button onclick="openToast('Android APK & iOS web app build ready for download')" class="w-full sm:w-auto min-w-[180px] bg-white hover:bg-slate-50 text-brand-600 border-2 border-brand-600 font-bold py-3.5 px-6 rounded-full transition flex items-center justify-center gap-2 shadow-sm active:scale-95">
+            <i data-lucide="smartphone" class="w-5 h-5"></i>
+            <span>Download Now</span>
+          </button>
+        </div>
+
+        <!-- Live Activity Ticker (Exact Match from Reference Screenshot) -->
+        <div class="max-w-md mx-auto bg-white border border-slate-100 rounded-2xl p-3.5 card-shadow flex items-center gap-3.5 text-left">
+          <div class="w-10 h-10 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center shrink-0 font-bold">
+            <i data-lucide="zap" class="w-5 h-5 animate-pulse"></i>
+          </div>
+          <div class="overflow-hidden">
+            <div class="text-xs font-bold text-slate-900 flex items-center gap-1.5">
+              <span>500+ Users received SMS codes Today</span>
+              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+            </div>
+            <p id="liveTickerMsg" class="text-xs text-slate-500 truncate mt-0.5">
+              "Someone just verified their WhatsApp (+234 810...)"
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- WELCOME / DASHBOARD CARD SECTION (Direct Match to Screenshot 2) -->
+    <section id="welcome-card" class="py-8 bg-slate-100/60 border-y border-slate-200/60">
+      <div class="max-w-md mx-auto px-4">
+        
+        <div class="bg-white rounded-3xl p-6 sm:p-8 card-shadow relative overflow-hidden border border-slate-100">
+          <!-- Festive Confetti Top Background -->
+          <div class="absolute top-0 left-0 right-0 h-28 confetti-bg pointer-events-none"></div>
+
+          <div class="relative z-10 text-center">
+            <!-- Trophy Badge Icon -->
+            <div class="w-20 h-20 bg-brand-600 rounded-full mx-auto flex items-center justify-center text-white shadow-xl shadow-brand-500/30 mb-4 ring-8 ring-brand-50">
+              <i data-lucide="trophy" class="w-10 h-10"></i>
+            </div>
+
+            <!-- Tag Pill -->
+            <div class="inline-flex items-center gap-1.5 bg-brand-50 text-brand-600 text-xs font-extrabold px-3 py-1 rounded-full border border-brand-100 uppercase tracking-wide mb-3">
+              <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+              <span>YOU'RE OFFICIALLY IN</span>
+            </div>
+
+            <!-- Main Greeting -->
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-2">
+              Welcome aboard,<br/><span class="text-brand-600" id="usernameDisplay">John! 🎉</span>
+            </h2>
+
+            <p class="text-slate-500 text-sm leading-relaxed mb-6">
+              Your Ifechi Store account is ready. You just unlocked virtual numbers, SMM boosting, aged accounts and more.
+            </p>
+
+            <!-- Stats Bar (As seen in Screenshot 2) -->
+            <div class="pt-4 border-t border-dashed border-slate-200 grid grid-cols-3 gap-2 text-center mb-6">
+              <div>
+                <div class="text-lg sm:text-xl font-extrabold text-brand-600">50k+</div>
+                <div class="text-[11px] font-semibold text-slate-400">Users</div>
+              </div>
+              <div>
+                <div class="text-lg sm:text-xl font-extrabold text-brand-600">180+</div>
+                <div class="text-[11px] font-semibold text-slate-400">Countries</div>
+              </div>
+              <div>
+                <div class="text-lg sm:text-xl font-extrabold text-brand-600">99.7%</div>
+                <div class="text-[11px] font-semibold text-slate-400">Success rate</div>
+              </div>
+            </div>
+
+            <!-- Account Status Card Widget -->
+            <div class="bg-brand-50/70 border border-brand-100/80 rounded-2xl p-4 flex items-center justify-between text-left">
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-full bg-brand-600 text-white flex items-center justify-center font-bold text-sm">
+                  ✓
+                </div>
+                <div>
+                  <div class="text-sm font-bold text-slate-900">Account status: Active</div>
+                  <div class="text-xs text-slate-500">Tier 1 Verified Instant Delivery</div>
+                </div>
+              </div>
+              <button onclick="toggleModal('fundModal')" class="text-xs font-bold bg-white text-brand-600 px-3 py-1.5 rounded-lg border border-brand-200 hover:bg-brand-50 transition shadow-sm">
+                Top Up
+              </button>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- INTERACTIVE WORKSPACE SERVICES -->
+    <section id="services" class="py-12 sm:py-16 max-w-5xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-10">
+        <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-900 mb-3">Instant Services Portal</h2>
+        <p class="text-slate-500 text-sm sm:text-base max-w-xl mx-auto">
+          Select a service tab below to order numbers or boost your social media engagement in real time.
+        </p>
+      </div>
+
+      <!-- Main Tabs Navigation -->
+      <div class="flex justify-center mb-8">
+        <div class="bg-slate-200/80 p-1.5 rounded-2xl flex gap-1 max-w-md w-full">
+          <button onclick="switchTab('sms')" id="tab-sms" class="flex-1 py-3 px-4 rounded-xl text-xs sm:text-sm font-bold transition-all bg-white text-brand-600 shadow-sm flex items-center justify-center gap-2">
+            <i data-lucide="message-square" class="w-4 h-4"></i>
+            <span>SMS Numbers</span>
+          </button>
+          <button onclick="switchTab('boost')" id="tab-boost" class="flex-1 py-3 px-4 rounded-xl text-xs sm:text-sm font-bold transition-all text-slate-600 hover:text-slate-900 flex items-center justify-center gap-2">
+            <i data-lucide="trending-up" class="w-4 h-4"></i>
+            <span>SMM Boosting</span>
+          </button>
+          <button onclick="switchTab('logs')" id="tab-logs" class="flex-1 py-3 px-4 rounded-xl text-xs sm:text-sm font-bold transition-all text-slate-600 hover:text-slate-900 flex items-center justify-center gap-2">
+            <i data-lucide="user-check" class="w-4 h-4"></i>
+            <span>Aged Accounts</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- TAB 1: VIRTUAL SMS NUMBERS & LIVE INBOX -->
+      <div id="panel-sms" class="space-y-6">
+        <div class="grid md:grid-cols-12 gap-6 items-start">
+          
+          <!-- Order Controls -->
+          <div class="md:col-span-6 bg-white p-6 rounded-3xl border border-slate-200 card-shadow space-y-4">
+            <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+              <i data-lucide="phone-call" class="w-5 h-5 text-brand-600"></i>
+              Select Virtual Phone Line
+            </h3>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Service Platform</label>
+              <select id="smsServiceSelect" class="w-full bg-slate-50 border border-slate-200 text-slate-900 text-sm rounded-xl p-3 focus:ring-2 focus:ring-brand-500 font-semibold outline-none">
+                <option value="WhatsApp" data-price="1200">WhatsApp (Instant OTP)</option>
+                <option value="Telegram" data-price="1000">Telegram Messenger</option>
+                <option value="Instagram" data-price="850">Instagram / Threads</option>
+                <option value="TikTok" data-price="750">TikTok Verification</option>
+                <option value="Google" data-price="650">Google / Gmail / YouTube</option>
+                <option value="Twitter" data-price="900">X (Formerly Twitter)</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Country Location</label>
+              <select id="smsCountrySelect" class="w-full bg-slate-50 border border-slate-200 text-slate-900 text-sm rounded-xl p-3 focus:ring-2 focus:ring-brand-500 font-semibold outline-none">
+                <option value="Nigeria" data-prefix="+234" data-mult="1.0">🇳🇬 Nigeria (+234)</option>
+                <option value="United States" data-prefix="+1" data-mult="1.5">🇺🇸 United States (+1)</option>
+                <option value="United Kingdom" data-prefix="+44" data-mult="1.4">🇬🇧 United Kingdom (+44)</option>
+                <option value="Ghana" data-prefix="+233" data-mult="1.1">🇬🇭 Ghana (+233)</option>
+                <option value="Canada" data-prefix="+1" data-mult="1.4">🇨🇦 Canada (+1)</option>
+              </select>
+            </div>
+
+            <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+              <div>
+                <span class="text-xs text-slate-400 font-medium block">Price per Number</span>
+                <span id="smsPriceDisplay" class="text-2xl font-extrabold text-brand-600">₦1,200</span>
+              </div>
+              <button onclick="requestVirtualNumber()" class="bg-brand-600 hover:bg-brand-700 active:scale-95 text-white font-bold px-6 py-3 rounded-xl transition shadow-lg shadow-brand-500/25 flex items-center gap-2">
+                <span>Get Line</span>
+                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Live Inbox Simulator -->
+          <div class="md:col-span-6 bg-slate-900 text-white p-6 rounded-3xl card-shadow min-h-[320px] flex flex-col justify-between relative overflow-hidden">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+              <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span class="text-xs font-mono font-semibold uppercase text-slate-400">Live Virtual Inbox Simulator</span>
+              </div>
+              <span class="text-xs bg-slate-800 text-slate-300 px-2.5 py-1 rounded-full font-mono">Status: Ready</span>
+            </div>
+
+            <div id="inboxDisplayContent" class="my-6 text-center space-y-3">
+              <div class="w-12 h-12 rounded-2xl bg-slate-800 text-slate-400 flex items-center justify-center mx-auto">
+                <i data-lucide="inbox" class="w-6 h-6"></i>
+              </div>
+              <p class="text-slate-400 text-sm">No number acquired yet.<br/>Select service and click <strong class="text-white">"Get Line"</strong> above.</p>
+            </div>
+
+            <div class="bg-slate-800/80 border border-slate-700/60 rounded-xl p-3 text-xs text-slate-400 flex items-center justify-between">
+              <span>Auto-refund if code doesn't arrive within 5 mins</span>
+              <i data-lucide="shield-check" class="w-4 h-4 text-emerald-400"></i>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- TAB 2: SMM BOOSTING WORKSPACE -->
+      <div id="panel-boost" class="hidden space-y-6">
+        <div class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 card-shadow max-w-2xl mx-auto space-y-5">
+          <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+            <i data-lucide="trending-up" class="w-6 h-6 text-brand-600"></i>
+            Social Media Page & Post Booster
+          </h3>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Platform</label>
+              <select id="boostPlatform" onchange="calculateBoost()" class="w-full bg-slate-50 border border-slate-200 text-slate-900 text-sm rounded-xl p-3 font-semibold outline-none">
+                <option value="Instagram" data-rate="4500">Instagram</option>
+                <option value="TikTok" data-rate="4000">TikTok</option>
+                <option value="YouTube" data-rate="5500">YouTube</option>
+                <option value="Facebook" data-rate="3500">Facebook</option>
+                <option value="Twitter" data-rate="4800">X (Twitter)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Service Type</label>
+              <select id="boostType" onchange="calculateBoost()" class="w-full bg-slate-50 border border-slate-200 text-slate-900 text-sm rounded-xl p-3 font-semibold outline-none">
+                <option value="Followers" data-mult="1.0">Real Followers / Subs</option>
+                <option value="Likes" data-mult="0.4">Post Likes / Reactions</option>
+                <option value="Views" data-mult="0.2">Video Views / Streams</option>
+                <option value="Comments" data-mult="1.8">Custom Positive Comments</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <div class="flex justify-between items-center mb-2">
+              <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Target Quantity</label>
+              <span id="boostQtyValue" class="text-base font-extrabold text-brand-600">1,000</span>
+            </div>
+            <input type="range" id="boostQtySlider" min="100" max="20000" step="100" value="1000" oninput="calculateBoost()" class="w-full accent-brand-600 cursor-pointer">
+            <div class="flex justify-between text-[11px] text-slate-400 mt-1 font-semibold">
+              <span>100 Min</span>
+              <span>10,000</span>
+              <span>20,000 Max</span>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Profile Link or Post URL</label>
+            <input type="text" id="boostUrl" placeholder="https://instagram.com/yourusername" class="w-full bg-slate-50 border border-slate-200 text-slate-900 text-sm rounded-xl p-3 outline-none focus:ring-2 focus:ring-brand-500 font-mono">
+          </div>
+
+          <div class="pt-4 border-t border-slate-100 flex items-center justify-between">
+            <div>
+              <span class="text-xs text-slate-400 font-medium block">Total Estimate</span>
+              <span id="boostPriceDisplay" class="text-2xl font-extrabold text-brand-600">₦4,500</span>
+            </div>
+            <button onclick="submitBoostOrder()" class="bg-brand-600 hover:bg-brand-700 text-white font-bold px-6 py-3 rounded-xl transition shadow-lg shadow-brand-500/25 active:scale-95">
+              Start Boost Campaign
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 3: AGED ACCOUNTS / LOGS PORTAL -->
+      <div id="panel-logs" class="hidden space-y-6">
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          
+          <div class="bg-white p-5 rounded-2xl border border-slate-200 card-shadow flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-2.5 py-1 rounded-full">In Stock (14)</span>
+                <i data-lucide="facebook" class="w-6 h-6 text-blue-600"></i>
+              </div>
+              <h4 class="font-extrabold text-slate-900 text-base">Aged Facebook Account (2018-2021)</h4>
+              <p class="text-xs text-slate-500 mt-1">Includes 2FA active, Marketplace unlocked & original cookie access.</p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+              <span class="text-lg font-bold text-brand-600">₦8,500</span>
+              <button onclick="openToast('Log purchase redirected to secure checkout')" class="text-xs font-bold bg-brand-600 text-white px-3.5 py-2 rounded-xl hover:bg-brand-700 transition">Buy Log</button>
+            </div>
+          </div>
+
+          <div class="bg-white p-5 rounded-2xl border border-slate-200 card-shadow flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-2.5 py-1 rounded-full">In Stock (8)</span>
+                <i data-lucide="instagram" class="w-6 h-6 text-pink-600"></i>
+              </div>
+              <h4 class="font-extrabold text-slate-900 text-base">Old Instagram Profile (5k+ Followers)</h4>
+              <p class="text-xs text-slate-500 mt-1">High engagement organic account, non-drop history with original Gmail access.</p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+              <span class="text-lg font-bold text-brand-600">₦22,000</span>
+              <button onclick="openToast('Log purchase redirected to secure checkout')" class="text-xs font-bold bg-brand-600 text-white px-3.5 py-2 rounded-xl hover:bg-brand-700 transition">Buy Log</button>
+            </div>
+          </div>
+
+          <div class="bg-white p-5 rounded-2xl border border-slate-200 card-shadow flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-2.5 py-1 rounded-full">In Stock (21)</span>
+                <i data-lucide="twitter" class="w-6 h-6 text-sky-500"></i>
+              </div>
+              <h4 class="font-extrabold text-slate-900 text-base">Verified Twitter / X Account</h4>
+              <p class="text-xs text-slate-500 mt-1">Created 2020. Phone verified, clean record without previous suspensions.</p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+              <span class="text-lg font-bold text-brand-600">₦12,000</span>
+              <button onclick="openToast('Log purchase redirected to secure checkout')" class="text-xs font-bold bg-brand-600 text-white px-3.5 py-2 rounded-xl hover:bg-brand-700 transition">Buy Log</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </section>
+
+    <!-- LIVE PRICING TABLE SECTION -->
+    <section id="pricing" class="py-12 bg-white border-t border-slate-200">
+      <div class="max-w-4xl mx-auto px-4">
+        <div class="flex items-center justify-between mb-6">
+          <div>
+            <h3 class="text-xl sm:text-2xl font-extrabold text-slate-900">Popular Number Rates</h3>
+            <p class="text-xs sm:text-sm text-slate-500">Instant SMS delivery prices in Nigerian Naira (₦)</p>
+          </div>
+          <span class="text-xs font-bold text-brand-600 bg-brand-50 border border-brand-100 px-3 py-1 rounded-full">
+            Live Automated Update
+          </span>
+        </div>
+
+        <div class="divide-y divide-slate-100 border border-slate-200 rounded-2xl overflow-hidden card-shadow">
+          
+          <div class="p-4 sm:p-5 flex items-center justify-between bg-white hover:bg-slate-50 transition">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold">WA</div>
+              <div>
+                <div class="font-bold text-slate-900 text-sm sm:text-base">WhatsApp Verification</div>
+                <div class="text-xs text-slate-500">🇳🇬 Nigeria (+234) • High Deliverability</div>
+              </div>
+            </div>
+            <div class="flex items-center gap-4">
+              <span class="font-extrabold text-slate-900 text-base">₦1,200</span>
+              <button onclick="quickOrderSMS('WhatsApp', 'Nigeria')" class="text-xs font-bold bg-brand-50 text-brand-600 border border-brand-200 hover:bg-brand-600 hover:text-white px-3.5 py-2 rounded-xl transition">Select</button>
+            </div>
+          </div>
+
+          <div class="p-4 sm:p-5 flex items-center justify-between bg-white hover:bg-slate-50 transition">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-sky-100 text-sky-700 flex items-center justify-center font-bold">TG</div>
+              <div>
+                <div class="font-bold text-slate-900 text-sm sm:text-base">Telegram Line</div>
+                <div class="text-xs text-slate-500">🇺🇸 United States (+1) • Instant OTP</div>
+              </div>
+            </div>
+            <div class="flex items-center gap-4">
+              <span class="font-extrabold text-slate-900 text-base">₦1,500</span>
+              <button onclick="quickOrderSMS('Telegram', 'United States')" class="text-xs font-bold bg-brand-50 text-brand-600 border border-brand-200 hover:bg-brand-600 hover:text-white px-3.5 py-2 rounded-xl transition">Select</button>
+            </div>
+          </div>
+
+          <div class="p-4 sm:p-5 flex items-center justify-between bg-white hover:bg-slate-50 transition">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center font-bold">IG</div>
+              <div>
+                <div class="font-bold text-slate-900 text-sm sm:text-base">Instagram & Threads</div>
+                <div class="text-xs text-slate-500">🇬🇧 United Kingdom (+44) • Direct API</div>
+              </div>
+            </div>
+            <div class="flex items-center gap-4">
+              <span class="font-extrabold text-slate-900 text-base">₦1,190</span>
+              <button onclick="quickOrderSMS('Instagram', 'United Kingdom')" class="text-xs font-bold bg-brand-50 text-brand-600 border border-brand-200 hover:bg-brand-600 hover:text-white px-3.5 py-2 rounded-xl transition">Select</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ ACCORDION SECTION -->
+    <section id="faq" class="py-12 bg-slate-50">
+      <div class="max-w-3xl mx-auto px-4">
+        <h3 class="text-2xl font-extrabold text-slate-900 text-center mb-8">Frequently Asked Questions</h3>
+        <div class="space-y-3">
+          
+          <details class="group bg-white p-4 rounded-2xl border border-slate-200 card-shadow transition">
+            <summary class="font-bold text-slate-900 cursor-pointer flex justify-between items-center list-none">
+              <span>What happens if no OTP verification code arrives?</span>
+              <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 group-open:rotate-180 transition-transform"></i>
+            </summary>
+            <p class="text-slate-600 text-xs sm:text-sm mt-3 leading-relaxed">
+              If an SMS code does not arrive within 5 minutes, you can simply cancel the number from your orders dashboard and your account balance is instantly returned. You are only charged when a code is received.
+            </p>
+          </details>
+
+          <details class="group bg-white p-4 rounded-2xl border border-slate-200 card-shadow transition">
+            <summary class="font-bold text-slate-900 cursor-pointer flex justify-between items-center list-none">
+              <span>Do you require my social media account passwords for boosting?</span>
+              <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 group-open:rotate-180 transition-transform"></i>
+            </summary>
+            <p class="text-slate-600 text-xs sm:text-sm mt-3 leading-relaxed">
+              Never! We only need your public username or post link to deliver likes, followers, or views. Never give your password to anyone.
+            </p>
+          </details>
+
+          <details class="group bg-white p-4 rounded-2xl border border-slate-200 card-shadow transition">
+            <summary class="font-bold text-slate-900 cursor-pointer flex justify-between items-center list-none">
+              <span>How do I fund my wallet balance?</span>
+              <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 group-open:rotate-180 transition-transform"></i>
+            </summary>
+            <p class="text-slate-600 text-xs sm:text-sm mt-3 leading-relaxed">
+              We support instant Nigerian bank transfers, Monnify, Paystack, Flutterwave, and cryptocurrency (USDT/BTC). Funds reflect automatically within seconds.
+            </p>
+          </details>
+
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FLOATING HELP WIDGET BUTTON (Exact match to screenshots) -->
+  <div class="fixed bottom-6 right-6 z-50">
+    <button onclick="toggleModal('helpModal')" class="relative group bg-slate-900 text-white p-4 rounded-full shadow-2xl hover:scale-105 transition-transform flex items-center justify-center border-2 border-amber-400">
+      <!-- "HELP" pill tag on top right -->
+      <span class="absolute -top-2.5 -right-1 bg-red-500 text-white text-[10px] font-black px-1.5 py-0.5 rounded-full shadow tracking-widest uppercase">
+        HELP
+      </span>
+      <i data-lucide="headphones" class="w-6 h-6"></i>
+    </button>
+  </div>
+
+  <!-- FUND WALLET MODAL -->
+  <div id="fundModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl p-6 max-w-sm w-full card-shadow space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <h4 class="font-extrabold text-slate-900 text-base">Top Up Wallet Balance</h4>
+        <button onclick="toggleModal('fundModal')" class="text-slate-400 hover:text-slate-600"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <div>
+        <label class="block text-xs font-bold text-slate-500 mb-1">Enter Amount (₦)</label>
+        <input type="number" id="fundAmountInput" value="5000" class="w-full bg-slate-50 border border-slate-200 p-3 rounded-xl font-bold text-slate-900 outline-none">
+      </div>
+      <div class="space-y-2">
+        <button onclick="simulateDeposit('Bank Transfer')" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-900 font-bold p-3 rounded-xl text-xs flex items-center justify-between">
+          <span>Instant Automated Bank Transfer</span>
+          <i data-lucide="building" class="w-4 h-4"></i>
+        </button>
+        <button onclick="simulateDeposit('Paystack / Card')" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-900 font-bold p-3 rounded-xl text-xs flex items-center justify-between">
+          <span>Paystack / Debit Card</span>
+          <i data-lucide="credit-card" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- HELP & SUPPORT MODAL -->
+  <div id="helpModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl p-6 max-w-sm w-full card-shadow space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <h4 class="font-extrabold text-slate-900 text-base">24/7 Live Support</h4>
+        <button onclick="toggleModal('helpModal')" class="text-slate-400 hover:text-slate-600"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <p class="text-xs text-slate-500">Need help with an order or deposit? Connect directly with our team on WhatsApp or Telegram.</p>
+      <div class="space-y-2">
+        <button onclick="openToast('Opening WhatsApp Support Desk...')" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold p-3 rounded-xl text-xs flex items-center justify-center gap-2">
+          <i data-lucide="message-circle" class="w-4 h-4"></i>
+          <span>Chat on WhatsApp</span>
+        </button>
+        <button onclick="openToast('Opening Telegram Channel...')" class="w-full bg-sky-500 hover:bg-sky-600 text-white font-bold p-3 rounded-xl text-xs flex items-center justify-center gap-2">
+          <i data-lucide="send" class="w-4 h-4"></i>
+          <span>Telegram Community</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION CONTAINER -->
+  <div id="toastContainer" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-slate-900 text-white text-xs font-bold px-4 py-3 rounded-full shadow-2xl opacity-0 pointer-events-none transition-all transform translate-y-4 flex items-center gap-2">
+    <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400"></i>
+    <span id="toastText">Action successful</span>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="bg-white border-t border-slate-200 py-8 text-center text-xs text-slate-500">
+    <div class="max-w-4xl mx-auto px-4 space-y-2">
+      <p class="font-bold text-slate-700">© 2026 Ifechi Store. All Rights Reserved.</p>
+      <p>Use virtual numbers and social boosting services in compliance with each platform's terms of service.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Initialize Lucide Icons
+    lucide.createIcons();
+
+    // Responsive Mobile Menu Toggle
+    function toggleMobileMenu() {
+      const menu = document.getElementById('mobileMenu');
+      menu.classList.toggle('hidden');
+    }
+
+    // Modal Helper
+    function toggleModal(id) {
+      const modal = document.getElementById(id);
+      modal.classList.toggle('hidden');
+    }
+
+    // Toast Alert Helper
+    let toastTimeout;
+    function openToast(message) {
+      const toast = document.getElementById('toastContainer');
+      const text = document.getElementById('toastText');
+      text.textContent = message;
+      toast.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
+      toast.classList.add('opacity-100', 'translate-y-0');
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        toast.classList.add('opacity-0', 'pointer-events-none', 'translate-y-4');
+        toast.classList.remove('opacity-100', 'translate-y-0');
+      }, 3000);
+    }
+
+    // Services Tab Switcher
+    function switchTab(tabKey) {
+      ['sms', 'boost', 'logs'].forEach(k => {
+        const btn = document.getElementById(`tab-${k}`);
+        const panel = document.getElementById(`panel-${k}`);
+        if (k === tabKey) {
+          btn.className = "flex-1 py-3 px-4 rounded-xl text-xs sm:text-sm font-bold transition-all bg-white text-brand-600 shadow-sm flex items-center justify-center gap-2";
+          panel.classList.remove('hidden');
+        } else {
+          btn.className = "flex-1 py-3 px-4 rounded-xl text-xs sm:text-sm font-bold transition-all text-slate-600 hover:text-slate-900 flex items-center justify-center gap-2";
+          panel.classList.add('hidden');
+        }
+      });
+    }
+
+    // Price Calculation for SMS
+    const smsSvcSelect = document.getElementById('smsServiceSelect');
+    const smsCtySelect = document.getElementById('smsCountrySelect');
+    const smsPriceDisp = document.getElementById('smsPriceDisplay');
+
+    function updateSmsPrice() {
+      const basePrice = parseFloat(smsSvcSelect.options[smsSvcSelect.selectedIndex].getAttribute('data-price'));
+      const mult = parseFloat(smsCtySelect.options[smsCtySelect.selectedIndex].getAttribute('data-mult'));
+      const total = Math.round(basePrice * mult);
+      smsPriceDisp.textContent = `₦${total.toLocaleString()}`;
+    }
+    smsSvcSelect.addEventListener('change', updateSmsPrice);
+    smsCtySelect.addEventListener('change', updateSmsPrice);
+
+    // Virtual Number & OTP Inbox Simulator
+    let otpTimer;
+    function requestVirtualNumber() {
+      const svc = smsSvcSelect.value;
+      const ctyOpt = smsCtySelect.options[smsCtySelect.selectedIndex];
+      const prefix = ctyOpt.getAttribute('data-prefix');
+      
+      const randomDigits = Math.floor(10000000 + Math.random() * 90000000);
+      const generatedPhone = `${prefix} ${randomDigits.toString().slice(0,3)} ${randomDigits.toString().slice(3)}`;
+      
+      const inbox = document.getElementById('inboxDisplayContent');
+      
+      inbox.innerHTML = `
+        <div class="space-y-3 animate-fade-in">
+          <div class="text-xs text-brand-500 font-bold uppercase tracking-widest">Active Line Reserved</div>
+          <div class="text-xl sm:text-2xl font-mono font-extrabold text-white bg-slate-800 py-2.5 px-4 rounded-xl inline-block border border-slate-700">
+            ${generatedPhone}
+          </div>
+          <p id="otpStatusLine" class="text-xs text-amber-400 font-semibold animate-pulse flex items-center justify-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
+            Waiting for ${svc} verification SMS code...
+          </p>
+          <div id="otpCodeContainer" class="hidden pt-2"></div>
+        </div>
+      `;
+
+      clearTimeout(otpTimer);
+      otpTimer = setTimeout(() => {
+        const generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
+        document.getElementById('otpStatusLine').className = "text-xs text-emerald-400 font-bold flex items-center justify-center gap-1.5";
+        document.getElementById('otpStatusLine').innerHTML = "✓ Verification Code Received!";
+        
+        const codeBox = document.getElementById('otpCodeContainer');
+        codeBox.classList.remove('hidden');
+        codeBox.innerHTML = `
+          <div class="bg-brand-600/20 border border-brand-500 p-3 rounded-2xl">
+            <span class="text-[11px] text-slate-300 block mb-1">YOUR OTP VERIFICATION CODE</span>
+            <div class="text-3xl font-mono font-extrabold tracking-widest text-emerald-300">${generatedOTP}</div>
+            <button onclick="copyToClipboard('${generatedOTP}')" class="mt-2 text-xs font-bold bg-brand-600 hover:bg-brand-700 text-white px-3 py-1.5 rounded-lg transition">
+              Copy OTP Code
+            </button>
+          </div>
+        `;
+        openToast(`SMS Code ${generatedOTP} Received for ${svc}!`);
+      }, 3500);
+    }
+
+    function quickOrderSMS(svc, country) {
+      smsSvcSelect.value = svc;
+      smsCtySelect.value = country;
+      updateSmsPrice();
+      switchTab('sms');
+      requestVirtualNumber();
+      window.scrollTo({ top: document.getElementById('services').offsetTop - 80, behavior: 'smooth' });
+    }
+
+    function copyToClipboard(text) {
+      const hiddenInput = document.createElement("input");
+      hiddenInput.value = text;
+      document.body.appendChild(hiddenInput);
+      hiddenInput.select();
+      document.execCommand("copy");
+      document.body.removeChild(hiddenInput);
+      openToast(`Copied code ${text} to clipboard!`);
+    }
+
+    // SMM Boosting Price Calculator
+    function calculateBoost() {
+      const platformSelect = document.getElementById('boostPlatform');
+      const typeSelect = document.getElementById('boostType');
+      const qtySlider = document.getElementById('boostQtySlider');
+      
+      const baseRate = parseFloat(platformSelect.options[platformSelect.selectedIndex].getAttribute('data-rate'));
+      const mult = parseFloat(typeSelect.options[typeSelect.selectedIndex].getAttribute('data-mult'));
+      const qty = parseInt(qtySlider.value);
+
+      document.getElementById('boostQtyValue').textContent = qty.toLocaleString();
+      
+      const total = Math.round((baseRate * mult * qty) / 1000);
+      document.getElementById('boostPriceDisplay').textContent = `₦${total.toLocaleString()}`;
+    }
+
+    function submitBoostOrder() {
+      const link = document.getElementById('boostUrl').value;
+      if (!link) {
+        openToast('Please enter a target profile or post link!');
+        return;
+      }
+      openToast('Boost Order Started! Delivery begins in 1-5 mins.');
+    }
+
+    // Simulated Deposits
+    function simulateDeposit(method) {
+      const amt = parseFloat(document.getElementById('fundAmountInput').value) || 5000;
+      const current = parseFloat(document.getElementById('userBalance').textContent.replace(/,/g, ''));
+      const newBal = current + amt;
+      document.getElementById('userBalance').textContent = newBal.toLocaleString('en-US', { minimumFractionDigits: 2 });
+      toggleModal('fundModal');
+      openToast(`Successfully funded ₦${amt.toLocaleString()} via ${method}`);
+    }
+
+    // Live Ticker Simulator
+    const tickerMessages = [
+      '"Someone just verified WhatsApp (+234 810...)"',
+      '"User #892 bought 2,000 Instagram Followers"',
+      '"Someone just verified Telegram (+1 415...)"',
+      '"Someone purchased an Aged Facebook Log"'
+    ];
+    let tickerIdx = 0;
+    setInterval(() => {
+      tickerIdx = (tickerIdx + 1) % tickerMessages.length;
+      const msgEl = document.getElementById('liveTickerMsg');
+      if (msgEl) {
+        msgEl.textContent = tickerMessages[tickerIdx];
+      }
+    }, 4000);
+
+    // Dynamic Headline Rotation
+    const dynamicWords = [
+      "Recieve SMS Instantly",
+      "SMS Virtual Numbers",
+      "SMM Page Boosting",
+      "Aged Social Accounts"
+    ];
+    let wordIdx = 0;
+    setInterval(() => {
+      wordIdx = (wordIdx + 1) % dynamicWords.length;
+      const wordEl = document.getElementById('heroDynamicText');
+      if (wordEl) {
+        wordEl.style.opacity = 0;
+        setTimeout(() => {
+          wordEl.textContent = dynamicWords[wordIdx];
+          wordEl.style.opacity = 1;
+        }, 200);
+      }
+    }, 3500);
+
+    // Initial calculations
+    updateSmsPrice();
+    calculateBoost();
+  </script>
+</body>
+</html>
